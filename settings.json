@@ -1,0 +1,7 @@
+{
+	"service_type": "Relay",
+	"service_version": "1.0.0",
+	"web_socket_ping_interval": 30000,
+	"web_socket_reconnect_interval": 30000,
+	"web_socket_update_data_interval": 60000
+}
