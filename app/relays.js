@@ -17,7 +17,7 @@ module.exports.init = function() {
 	relaysStates = new Array(SharedManager.service.settings.relays.length);
 
 	SharedManager.service.settings.relays.forEach(function(relaySettings, index) {
-		exec('fast-gpio set-output ' + relaySettings.relay_gpio_pin, (error, stdout, stderr) => {
+		exec('fast-gpio set-output ' + String(relaySettings.relay_gpio_pin), (error, stdout, stderr) => {
 		});
 		
 		switch (relaySettings.mode) {
@@ -35,7 +35,7 @@ module.exports.init = function() {
 		}
 		
 		if (relaySettings.feedback_enable == true) {
-			exec('fast-gpio set-input ' + relaySettings.feedback_gpio_pin, (error, stdout, stderr) => {
+			exec('fast-gpio set-input ' + String(relaySettings.feedback_gpio_pin), (error, stdout, stderr) => {
 			});
 		}
 	});
@@ -44,7 +44,7 @@ module.exports.init = function() {
 module.exports.setRelay = function(relayNumber, state) {
 	const relaySettings = SharedManager.service.settings.relays[relayNumber];
 
-	exec('fast-gpio set ' + relaySettings.relay_gpio_pin + ' ' + (state == true ? String(relaySettings.gpio_true_value) : String(relaySettings.gpio_false_value)), (error, stdout, stderr) => {
+	exec('fast-gpio set ' + String(relaySettings.relay_gpio_pin) + ' ' + (state == true ? String(relaySettings.gpio_true_value) : String(relaySettings.gpio_false_value)), (error, stdout, stderr) => {
 	});
 	
 	relaysStates[relayNumber] = state;
@@ -53,7 +53,7 @@ module.exports.setRelay = function(relayNumber, state) {
 module.exports.readRelayFeedback = function(relayNumber, callback) {
 	const relaySettings = SharedManager.service.settings.relays[relayNumber];
 	
-	exec('fast-gpio read ' + relaySettings.feedback_gpio_pin, (error, stdout, stderr) => {
+	exec('fast-gpio read ' + String(relaySettings.feedback_gpio_pin), (error, stdout, stderr) => {
 		if (stdout == '1') {
 			callback(true);
 		} else {
