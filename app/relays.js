@@ -15,7 +15,12 @@ var relaysStates;
 
 module.exports.init = function() {
 	relaysStates = new Array(SharedManager.service.settings.relays.length);
-
+	
+	exec('fast-gpio set-output ' + String(SharedManager.service.settings.status_led_gpio_pin), (error, stdout, stderr) => {
+	});
+	exec('fast-gpio set ' + String(SharedManager.service.settings.status_led_gpio_pin) + ' 1', (error, stdout, stderr) => {
+	});
+	
 	SharedManager.service.settings.relays.forEach(function(relaySettings, index) {
 		exec('fast-gpio set-output ' + String(relaySettings.relay_gpio_pin), (error, stdout, stderr) => {
 		});
@@ -48,6 +53,9 @@ module.exports.setRelay = function(relayNumber, state) {
 	});
 	
 	relaysStates[relayNumber] = state;
+	
+	exec('fast-gpio set ' + String(SharedManager.service.settings.status_led_gpio_pin) + ' ' + (state == true ? '0' : '1'), (error, stdout, stderr) => {
+	});
 };
 
 module.exports.readRelayFeedback = function(relayNumber, callback) {
